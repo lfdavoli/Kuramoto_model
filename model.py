@@ -1,5 +1,5 @@
 # %% [markdown]
-# # Kuramoto model
+#  # Kuramoto model
 
 # %%
 # Libs
@@ -7,13 +7,42 @@ import numpy as np
 from scipy.integrate import solve_ivp
 import matplotlib.pyplot as plt
 
-# %% [markdown]
-# ### 1. 
-# 
-# scrivi
 
 # %% [markdown]
-# ### 2.
+#  ### 1.
+# Start from:
+# 
+# $r(t)e^{-i\Psi(t)} = \frac{1}{N}\sum_{i=1}^{N} e^{-i\theta_i}$
+# 
+# dividing real and imaginary part:
+# 
+# $Re:\;\;\; rcos(-\Psi) = \frac{1}{N}\sum_{i=1}^{N} cos(-\theta)$
+# 
+# $\;\;\;\;\;\;\;\;\;\; rcos(\Psi) = \frac{1}{N}\sum_{i=1}^{N} cos(\theta)$
+# 
+# $Im:\;\;\; irsin(-\Psi) = \frac{1}{N}\sum_{i=1}^{N} isin(-\theta)$
+# 
+# $\;\;\;\;\;\;\;\;\;\; -irsin(\Psi) = \frac{1}{N}\sum_{i=1}^{N} -isin(\theta)$
+# 
+# $\;\;\;\;\;\;\;\;\;\; irsin(\Psi) = \frac{1}{N}\sum_{i=1}^{N} isin(\theta)$
+# 
+# finally obtaining the original formulation:
+# 
+# $r(t)e^{i\Psi(t)} = \frac{1}{N}\sum_{i=1}^{N} e^{i\theta_i}$
+# 
+# Using this result we can work on the actual equation of motion:
+# 
+# $\dot{\theta_i}=\omega_i+\frac{K}{N}\sum_{j}\frac{1}{2i}[e^{i(\theta_j - \theta_i)}-e^{-i(\theta_j - \theta_i)}]$
+# 
+# $\dot{\theta_i}=\omega_i+[\frac{K}{2iN}e^{-i\theta_i}\sum_{j}e^{i\theta_j} - \frac{K}{2iN}e^{i\theta_i}\sum_{j}e^{-i\theta_j}]$
+# 
+# $\dot{\theta_i}=\omega_i+[\frac{K}{2i}e^{-i\theta_i}r(t)e^{i\Psi(t)} - \frac{K}{2i}e^{i\theta_i}r(t)e^{-i\Psi(t)}]$
+# 
+# $\dot{\theta_i}=\omega_i+Kr(t)sin(\Psi - \theta_i)$
+# 
+
+# %% [markdown]
+#  ### 2.
 
 # %%
 # function d theta / dt
@@ -25,6 +54,7 @@ def dtheta_dt(t,thetas,omegas,K):
     psi = np.arctan(sum_s/sum_c)
     r = sum_c/(N*np.cos(psi))
     return omegas + K*r*np.sin(psi*np.ones(N)-thetas)
+
 
 # %%
 N = 10
@@ -47,11 +77,12 @@ print(omegas)
 
 # notice dependence of final state
 
-# %% [markdown]
-# #### Considerations:
 
 # %% [markdown]
-# ### 3.
+#  #### Considerations:
+
+# %% [markdown]
+#  ### 3.
 
 # %%
 N = 100
@@ -78,14 +109,17 @@ for i,k in enumerate(K):
     ax.legend()
 
 
+
 # %%
 sol
+
 
 # %%
 sol.y[0][0]-sol.y[1][0]
 
+
 # %% [markdown]
-# ### 4.
+#  ### 4.
 
 # %%
 N = 100
@@ -111,13 +145,15 @@ for n_sim in np.arange(0,N_sim):
         r = np.mean(np.abs(sum_c/(N*np.cos(psi))))
         R[k]+=r/N_sim
 
+
 # %%
 R_mean = [R[k] for k in K]
 plt.plot(R_mean)
 plt.grid()
 
+
 # %% [markdown]
-# ### 5.
+#  ### 5.
 
 # %%
 N = [100,500,2000,5000,15000]
@@ -147,6 +183,7 @@ for i,n in enumerate(N):
             R_dict[n][i]+=r/N_sim
             
 
+
 # %%
 fig,ax = plt.subplots()
 for key in R_dict.keys():
@@ -158,18 +195,20 @@ ax.set_title('Average R as function of K and rotors number')
 ax.set_xlabel('K')
 ax.set_ylabel('R')
 
+
 # %% [markdown]
-# ### 6.
-# Assuming normal distribution of omegas (CLT):
+#  ### 6.
+#  Assuming normal distribution of omegas (CLT):
 # 
-# $p(0) = p(\omega=0)_{K} = \frac{1}{\sqrt{2 \pi}}$ 
+#  $p(0) = p(\omega=0)_{K} = \frac{1}{\sqrt{2 \pi}}$
 # 
-# $K_c = \frac{2}{\pi p_0}$
+#  $K_c = \frac{2}{\pi p_0}$
 
 # %%
 p_0 = 1/np.sqrt(2*np.pi)
 K_c = 2/(np.pi*p_0)
 K_c
+
 
 # %%
 p_0 = 1/np.sqrt(2*np.pi)
@@ -187,7 +226,11 @@ ax.set_title('Average R as function of K and rotors number')
 ax.set_xlabel('K')
 ax.set_ylabel('R')
 
+
 # %%
+
+
+
 
 
 
