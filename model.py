@@ -218,7 +218,7 @@ fig,ax = plt.subplots()
 for key in R_dict.keys():
     ax.plot(K,R_dict[key],label='$N_{rotors} = $'+str(key))
 
-ax.axvline(x=K_c, label='$K_c$ threshold',color='g')
+ax.axvline(x=K_c, label='$K_c$ threshold',color='g', ls='--')
 
 ax.legend()
 ax.grid()
